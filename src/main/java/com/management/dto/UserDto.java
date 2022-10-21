@@ -1,10 +1,11 @@
 package com.management.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,9 +18,9 @@ public class UserDto {
     private String email;
     @NotNull
     private String password;
-//    private Position position;
-    private Date joinedAt;
+    private String position;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate joinedAt;
     @NotNull
     private Integer salary;
-
 }

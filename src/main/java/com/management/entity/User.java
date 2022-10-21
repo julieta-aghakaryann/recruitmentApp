@@ -1,5 +1,7 @@
 package com.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,11 +28,13 @@ public class User implements Serializable {
     private String lastName;
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     private String password;
     @ManyToOne
-    @JoinColumn(name="position_id")
+    @JoinColumn(name = "position_id")
     private Position position;
-    private Date joinedAt;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate joinedAt;
     private Integer salary;
 
     @Override

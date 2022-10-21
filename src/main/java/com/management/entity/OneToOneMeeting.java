@@ -1,12 +1,13 @@
 package com.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,9 +20,10 @@ public class OneToOneMeeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
-    private User initiator;
-    @ManyToOne
-    private User participant;
-    private Date date;
+    private Integer initiatorId;
+    private Integer participantId;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate date;
+    private String subject;
+    private String description;
 }

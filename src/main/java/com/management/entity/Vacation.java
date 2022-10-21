@@ -7,23 +7,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "salary_change_history")
-public class SalaryChangeHistory {
+@Table(name = "vacation")
+public class Vacation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    private Integer oldSalary;
-    private Integer newSalary;
+    public Integer id;
+    public Integer userId;
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date changedDate;
+    public LocalDate dateFrom;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    public LocalDate dateTo;
+    public boolean isPaid;
 }
