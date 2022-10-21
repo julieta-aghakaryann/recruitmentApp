@@ -24,6 +24,11 @@ dependencies {
 	implementation 'org.modelmapper.extensions:modelmapper-spring:3.1.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0-rc2'
 	implementation 'org.springframework.security:spring-security-crypto:5.7.4'
+	implementation 'org.springframework.security:spring-security-core:5.7.4'
+	implementation 'org.springframework.security:spring-security-config:5.7.4'
+	implementation 'org.springframework.security:spring-security-web:5.7.4'
+
+
 
 
 }

@@ -23,6 +23,8 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
+    private String username;
     @JsonProperty(value = "first_name")
     private String firstName;
     private String lastName;

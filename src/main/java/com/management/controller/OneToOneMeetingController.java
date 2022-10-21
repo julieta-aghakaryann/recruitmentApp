@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/meeting")
+@RequestMapping("/company/meeting")
 public class OneToOneMeetingController {
 
     public final OneToOneMeetingService oneToOneMeetingService;

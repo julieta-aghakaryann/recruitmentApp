@@ -11,11 +11,20 @@ import com.management.repository.SalaryChangeHistoryRepository;
 import com.management.repository.UserRepository;
 import com.management.service.UserService;
 import com.management.validation.EmailValidation;
+import com.sun.istack.NotNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -66,4 +75,29 @@ public class UserServiceImpl implements UserService {
         user.setSalary(newSalary);
         return user;
     }
+
+
+    @Transactional
+    public User findByUsername(@NotNull String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(@NotNull String username) throws UsernameNotFoundException {
+        User user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("Username [%s] not found", user.getUsername()));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                user.getPassword(),
+                mapRolesToAuthorities(List.of(user.getPosition())));
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Position> roles) {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getPosition()))
+                .toList();
+    }
+
 }

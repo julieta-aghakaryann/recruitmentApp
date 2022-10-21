@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/vacation")
+@RequestMapping("/company/vacation")
 public class VacationController {
 
     private final VacationService vacationService;
