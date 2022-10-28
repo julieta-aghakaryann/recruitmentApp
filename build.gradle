@@ -28,9 +28,6 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-config:5.7.4'
 	implementation 'org.springframework.security:spring-security-web:5.7.4'
 
-
-
-
 }
 
 java{

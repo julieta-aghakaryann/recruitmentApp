@@ -1,12 +1,12 @@
 package com.management.service.impl;
 
-import com.management.config.Configurations;
 import com.management.exception.WrongEmailException;
 import com.management.dto.UserDto;
 import com.management.entity.Position;
 import com.management.entity.SalaryChangeHistory;
 import com.management.entity.User;
 import com.management.repository.PositionRepository;
+import com.management.repository.PrivilegeRepository;
 import com.management.repository.SalaryChangeHistoryRepository;
 import com.management.repository.UserRepository;
 import com.management.service.UserService;
@@ -21,10 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,16 +30,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SalaryChangeHistoryRepository salaryChangeHistoryRepository;
     private final PositionRepository positionRepository;
-    private final Configurations configurations;
+    private final PrivilegeRepository privilegeRepository;
 
 
     public UserServiceImpl(UserRepository userRepository,
-                           SalaryChangeHistoryRepository salaryChangeHistoryRepository,
-                           PositionRepository positionRepository,
-                           Configurations configurations) {
+                           SalaryChangeHistoryRepository salaryChangeHistoryRepository, PositionRepository positionRepository, PrivilegeRepository privilegeRepository) {
         this.salaryChangeHistoryRepository = salaryChangeHistoryRepository;
         this.positionRepository = positionRepository;
-        this.configurations = configurations;
+        this.privilegeRepository = privilegeRepository;
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         this.userRepository = userRepository;
     }
@@ -51,8 +46,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User createUser(UserDto dto) {
         User user = modelMapper.map(dto, User.class);
-        user.setPosition(positionRepository.findByPosition(dto.getPosition()));
-        user.setPassword(configurations.encoder().encode(dto.getPassword()));
+        user.setPositions(dto.getPositions());
         if (!new EmailValidation().emailValidation(user.getEmail())) {
             throw new WrongEmailException();
         }
@@ -91,13 +85,12 @@ public class UserServiceImpl implements UserService {
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),
-                mapRolesToAuthorities(List.of(user.getPosition())));
+                mapRolesToAuthorities(user.getPositions()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Position> roles) {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getPosition()))
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Position> positions) {
+        return positions.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .toList();
     }
-
 }

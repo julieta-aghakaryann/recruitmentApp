@@ -11,6 +11,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,9 +33,24 @@ public class User implements Serializable {
     private String email;
     @JsonIgnore
     private String password;
-    @ManyToOne
-    @JoinColumn(name = "position_id")
-    private Position position;
+    @ManyToMany
+    @JoinTable(
+            name = "users_positions",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "position_id", referencedColumnName = "id"))
+    private Collection<Position> positions;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_privileges",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "privileges_id", referencedColumnName = "id"))
+    private Collection<Privilege> privileges;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate joinedAt;
     private Integer salary;
@@ -43,11 +59,13 @@ public class User implements Serializable {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", position=" + position +
+                ", positions=" + positions +
+                ", privileges=" + privileges +
                 ", joinedAt=" + joinedAt +
                 ", salary=" + salary +
                 '}';

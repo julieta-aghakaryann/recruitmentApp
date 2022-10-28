@@ -3,13 +3,10 @@ package com.management.controller;
 import com.management.dto.PositionDto;
 import com.management.service.PositionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/position")
+@RequestMapping("company/position")
 public class PositionController {
 
     private final PositionService positionService;
@@ -21,5 +18,11 @@ public class PositionController {
     @PostMapping("/create")
     public ResponseEntity<?> createPosition(@RequestBody PositionDto dto) {
         return ResponseEntity.ok().body(positionService.create(dto));
+    }
+
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> findAllPositions() {
+        return ResponseEntity.ok().body(positionService.getAllPositions());
     }
 }

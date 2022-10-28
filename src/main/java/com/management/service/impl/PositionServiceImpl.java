@@ -10,6 +10,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class PositionServiceImpl implements PositionService {
@@ -25,11 +26,16 @@ public class PositionServiceImpl implements PositionService {
     @Override
     @Transactional
     public Position create(PositionDto dto){
-        if(positionRepository.findByPosition(dto.getPosition())!=null) {
+        if(positionRepository.findByName(dto.getPosition())!=null) {
             throw new DuplicatePositionException(dto.getPosition());
         }
         Position position = modelMapper.map(dto, Position.class);
 
         return positionRepository.save(position);
+    }
+
+    @Override
+    public List<Position> getAllPositions() {
+        return (List<Position>) positionRepository.findAll();
     }
 }
